@@ -37,7 +37,7 @@ MyNews is a modern, clean, and lightweight news app built using **Jetpack Compos
 
 ## 📱 Screenshots
 
-*(Add your own screenshots here if available)*
+*(coming soon)*
 
 ---
 
