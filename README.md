@@ -1,3 +1,4 @@
+#    ( UNDER CONSTRUCTION )
 # 📲 MyNews - Jetpack Compose News App
 
 MyNews is a modern, clean, and lightweight news app built using **Jetpack Compose**, **NewsAPI**, **Room**, and **MVVM architecture**. It delivers the latest headlines in under 50 words with an intuitive and minimal interface.
