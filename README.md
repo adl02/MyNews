@@ -40,31 +40,31 @@ MyNews is a modern, clean, and lightweight news app built using **Jetpack Compos
 
 ### 🟣 Splash & Onboarding
 
-| Splash | Onboarding 1 | Onboarding 2 |
-|--------|--------------|--------------|
-| ![Splash](screenshots/splash.png) | ![Onboard1](screenshots/onboarding1.png) | ![Onboard2](screenshots/onboarding2.png) |
+| Splash                            | Onboarding 1                             | Onboarding 2                             |
+|-----------------------------------|------------------------------------------|------------------------------------------|
+| ![Splash](screenshots/splash.jpg) | ![Onboard1](screenshots/onboarding1.jpg) | ![Onboard2](screenshots/onboarding2.jpg) |
 
 ---
 
 ### 🟢 Home & Category
 
-| Home | Category |
-|------|----------|
-| ![Home](screenshots/home.png) | ![Category](screenshots/category.png) |
+| Home                          | Category                              |
+|-------------------------------|---------------------------------------|
+| ![Home](screenshots/home.jpg) | ![Category](screenshots/category.jpg) |
 
 ---
 
 ### 🔵 Features
 
-| Saved Articles | Share Button | Share Message |
-|----------------|--------------|----------------|
-| ![Saved](screenshots/saved.png) | ![ShareBtn](screenshots/share_button.png) | ![ShareMsg](screenshots/share_msg.png) |
+| Saved Articles                  | Share Button                              | Share Message                          |
+|---------------------------------|-------------------------------------------|----------------------------------------|
+| ![Saved](screenshots/saved.jpg) | ![ShareBtn](screenshots/share_button.jpg) | ![ShareMsg](screenshots/share_msg.jpg) |
 
 ---
 
-| Swipe to Refresh |
-|------------------|
-| ![Swipe](screenshots/swipe_refresh.png) |
+| Swipe to Refresh                        |
+|-----------------------------------------|
+| ![Swipe](screenshots/swipe_refresh.jpg) |
 
 ---
 
