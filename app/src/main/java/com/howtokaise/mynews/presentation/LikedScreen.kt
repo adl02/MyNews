@@ -2,7 +2,9 @@ package com.howtokaise.mynews.presentation
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -40,19 +43,24 @@ fun LikedScreen(viewModel: NewViewModel) {
 
     val likedArticles by viewModel.likedArticles.collectAsState()
     val context = LocalContext.current
+    val isDarkTheme = isSystemInDarkTheme()
 
     if (likedArticles.isEmpty()) {
-        Box(modifier = Modifier
-            .fillMaxSize(),
-            contentAlignment = Alignment.Center) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(if (isDarkTheme) Color.Black else Color.White),
+            contentAlignment = Alignment.Center
+        ) {
 
-            Text(text = "No liked articles yet.")
+            Text(text = "No Saved articles yet.")
         }
     } else {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 35.dp)
+               // .padding(top = 35.dp)
+                .background(if (isDarkTheme) Color.Black else Color.White)
         ) {
             Text(
                 text = "<--Saved-->",
@@ -63,9 +71,10 @@ fun LikedScreen(viewModel: NewViewModel) {
 
             HorizontalDivider()
 
-            LazyColumn(modifier = Modifier
-                .padding(bottom = 50.dp)
-            ){
+            LazyColumn(
+                modifier = Modifier
+                   // .padding(bottom = 50.dp)
+            ) {
                 items(likedArticles) { article ->
                     Row(
                         modifier = Modifier
@@ -115,7 +124,6 @@ fun LikedScreen(viewModel: NewViewModel) {
 
                         )
                     }
-
                 }
             }
         }

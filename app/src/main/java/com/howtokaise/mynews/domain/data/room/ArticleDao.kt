@@ -13,7 +13,7 @@ interface ArticleDao {
     @Query("DELETE FROM articles WHERE link = :link")
     suspend fun delete(link: String)
 
-    @Query("SELECT * FROM articles")
+    @Query("SELECT * FROM articles ORDER BY likedAt DESC")
     fun getAllLikedArticle(): Flow<List<ArticleEntity>>
 
     @Query("SELECT EXISTS(SELECT 1 FROM articles WHERE link = :link)")

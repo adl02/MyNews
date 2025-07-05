@@ -1,5 +1,6 @@
 package com.howtokaise.mynews.domain.data.room
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import okio.Source
@@ -13,5 +14,7 @@ data class ArticleEntity(
     val image : String,
     val source: String = "",
     val author : String = "",
-    val time : String = ""
+    val time : String = "",
+    @ColumnInfo(defaultValue = "0")
+    val likedAt : Long = System.currentTimeMillis()
 )

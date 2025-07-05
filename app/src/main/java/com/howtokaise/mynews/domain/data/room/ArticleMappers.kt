@@ -10,7 +10,8 @@ fun ArticleEntity.toArticle(): Article = Article(
     isLiked = true,
     source = source,
     author = author,
-    time = time
+    time = time,
+    likedAt = likedAt
 )
 
 fun Article.toEntity(): ArticleEntity = ArticleEntity(
@@ -20,6 +21,7 @@ fun Article.toEntity(): ArticleEntity = ArticleEntity(
     link = link,
     source = source,
     author = author,
-    time = time
+    time = time,
+    likedAt = System.currentTimeMillis()
 
 )

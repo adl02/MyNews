@@ -8,6 +8,7 @@ data class Article(
     var isLiked : Boolean = false,
     val source : String = "",
     val author : String = "",
-    val time : String = ""
+    val time : String = "",
+    val likedAt : Long = 0L
 )
 

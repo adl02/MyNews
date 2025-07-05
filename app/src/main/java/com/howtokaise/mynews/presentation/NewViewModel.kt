@@ -15,6 +15,8 @@ import toEntity
 
 class NewViewModel(private val articleDao: ArticleDao) : ViewModel() {
 
+    private val fetchedCategories = mutableListOf<String>()
+
     private val _articles = MutableStateFlow<List<Article>>(emptyList())
     val articles: StateFlow<List<Article>> = _articles.asStateFlow()
 
@@ -31,11 +33,12 @@ class NewViewModel(private val articleDao: ArticleDao) : ViewModel() {
     private val shownArticles = mutableListOf<Article>()
     private val pageSize = 10
 
+
     init {
         fetchNews(1)
     }
 
-    fun fetchNews(page: Int) {
+    fun fetchNews(page: Int, category: String ="") {
         if (isLoading) return
         isLoading = true
 
@@ -44,7 +47,8 @@ class NewViewModel(private val articleDao: ArticleDao) : ViewModel() {
 
             apiClient.getTopHeadlines(
                 TopHeadlinesRequest.Builder()
-                    .q("trump")
+                    .language("en")
+                    .category(category)
                     .page(page)
                     .pageSize(pageSize)
                     .build(),
@@ -65,22 +69,18 @@ class NewViewModel(private val articleDao: ArticleDao) : ViewModel() {
                                 )
                             } ?: emptyList()
 
-                            // Add to full pool
                             if (page == 1) {
                                 allFetchedArticles.clear()
                                 shownArticles.clear()
                             }
                             allFetchedArticles.addAll(fetched)
 
-                            // Determine next batch without repeats
                             val remaining = allFetchedArticles.filterNot { art -> shownArticles.any { it.link == art.link } }
                             val nextBatch = remaining.shuffled().take(pageSize)
 
-                            // Update shown and UI
                             shownArticles.addAll(nextBatch)
                             _articles.value = shownArticles.toList()
 
-                            // Update flags
                             currentPage = page
                             hasMore = remaining.isNotEmpty()
                             isLoading = false
@@ -106,7 +106,8 @@ class NewViewModel(private val articleDao: ArticleDao) : ViewModel() {
         val updated = article.copy(isLiked = !article.isLiked)
         viewModelScope.launch {
             if (updated.isLiked) {
-                articleDao.insert(updated.toEntity())
+                val likedArticle = updated.copy(likedAt = System.currentTimeMillis())
+                articleDao.insert(likedArticle.toEntity())
             } else {
                 articleDao.delete(updated.link)
             }
@@ -121,6 +122,18 @@ class NewViewModel(private val articleDao: ArticleDao) : ViewModel() {
         currentPage = 1
         hasMore = true
         _articles.value = emptyList()
+        allFetchedArticles.clear()
+        shownArticles.clear()
         fetchNews(1)
+    }
+
+    fun fetchNewsByCategory(category: String){
+
+        currentPage = 1
+        hasMore = true
+        _articles.value = emptyList()
+        allFetchedArticles.clear()
+        shownArticles.clear()
+        fetchNews(1,category)
     }
 }

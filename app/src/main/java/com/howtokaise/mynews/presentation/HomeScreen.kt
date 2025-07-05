@@ -1,5 +1,6 @@
 package com.howtokaise.mynews.presentation
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.BackHandler
@@ -27,13 +28,16 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,42 +55,87 @@ import coil.request.ImageRequest
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshState
 import com.howtokaise.mynews.R
 import com.howtokaise.mynews.domain.data.room.formatDateTime
 import com.howtokaise.mynews.domain.data.room.limitWords
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
-fun HomeScreen(viewModal: NewViewModel) {
+fun HomeScreen(
+    viewModal: NewViewModel,
+    scrollToTopTrigger : MutableState<Boolean>,
+    refreshTrigger : MutableState<Boolean>
+) {
 
     val articles by viewModal.articles.collectAsState()
     val pagerState = rememberPagerState(pageCount = { articles.size })
 
+    val isRefreshing by remember { derivedStateOf { articles.isEmpty() } }
+    val swipeRefreshState = remember { SwipeRefreshState(isRefreshing = false) }
+
+    val coroutineScope = rememberCoroutineScope()
+
+
+    LaunchedEffect(scrollToTopTrigger.value) {
+        if (scrollToTopTrigger.value){
+
+            scrollToTopTrigger.value = false
+
+            coroutineScope.launch{
+                pagerState.animateScrollToPage(0)
+                swipeRefreshState.isRefreshing = true
+                delay(600)
+                viewModal.refreshNews()
+                delay(300)
+                swipeRefreshState.isRefreshing = false
+            }
+
+        }
+    }
+
     var showFullScreen by remember { mutableStateOf(false) }
     var currentImageUrl by remember { mutableStateOf("") }
+    var selectedCategory by remember { mutableStateOf("General") }
 
     val context = LocalContext.current
     val isDarkTheme = isSystemInDarkTheme()
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
 
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-                .background(if (isDarkTheme) Color.Black else Color.White)
+
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(if (isDarkTheme) Color.Black else Color.White)
+    ) {
+        TopBar(
+            viewModal,
+            selectedCategory,
+            onCategorySelected = { category ->
+                selectedCategory = category
+                viewModal.fetchNewsByCategory(category)
+            }
+        )
+        SwipeRefresh(
+            state = swipeRefreshState,
+            onRefresh = {
+                swipeRefreshState.isRefreshing = true
+                viewModal.refreshNews()
+                swipeRefreshState.isRefreshing = false
+            }
         ) {
-            TopBar()
-
-            if (articles.isEmpty()){
+            if (articles.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
-                ){
+                ) {
                     CircularProgressIndicator()
                 }
-            }else {
+            } else {
                 Box(modifier = Modifier.fillMaxSize()) {
                     VerticalPager(
                         state = pagerState,
@@ -96,7 +145,7 @@ fun HomeScreen(viewModal: NewViewModel) {
                             snapPositionalThreshold = 0.1f
                         )
                     ) { page ->
-                        if (page >= articles.size - 3){
+                        if (page >= articles.size - 3) {
                             viewModal.loadMoreNews()
                         }
                         val article = articles[page]
@@ -124,8 +173,8 @@ fun HomeScreen(viewModal: NewViewModel) {
                                         .crossfade(true)
                                         .diskCachePolicy(CachePolicy.ENABLED)
                                         .listener(
-                                            onSuccess = {_, _-> isImageLoading = false},
-                                            onError = {_, _-> isImageLoading = false}
+                                            onSuccess = { _, _ -> isImageLoading = false },
+                                            onError = { _, _ -> isImageLoading = false }
                                         )
                                         .build(),
                                     contentDescription = null,
@@ -195,18 +244,18 @@ fun HomeScreen(viewModal: NewViewModel) {
 
                             Spacer(modifier = Modifier.height(12.dp))
 
-                            Row (
+                            Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(10.dp)
-                            ){
+                            ) {
                                 Text(
-                                    text = formatDateTime(article.time) +" |",
+                                    text = formatDateTime(article.time) + " |",
                                     fontSize = 11.sp,
                                     color = Color.Gray
                                 )
                                 Text(
-                                    text = limitWords(article.author) +" |",
+                                    text = limitWords(article.author) + " |",
                                     fontSize = 11.sp,
                                     color = Color.Gray,
                                 )
