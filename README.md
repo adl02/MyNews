@@ -38,9 +38,9 @@ MyNews is a modern, clean, and lightweight news app built using **Jetpack Compos
 
 ### 🟣 Splash & Onboarding
 
-| Splash | Onboarding 1 | Onboarding 2                             |
-|--------|--------------|------------------------------------------|
-| ![Splash](screenshots/splash.jpg) | ![Onboard1](screenshots/onboarding1.jpg) | ![Onboard2](screenshots/onboarding2.jpg) | ![Onboard2](screenshots/onboarding3.jpg) |
+| Splash                            | Onboarding 1 | Onboarding 2                             | Onboarding 3                             |
+|-----------------------------------|--------------|------------------------------------------|
+| ![Splash](screenshots/splash.jpg) | ![Onboard1](screenshots/onboarding1.jpg) | ![Onboard2](screenshots/onboarding2.jpg) | ![Onboard3](screenshots/onboarding3.jpg) |
 
 ---
 
