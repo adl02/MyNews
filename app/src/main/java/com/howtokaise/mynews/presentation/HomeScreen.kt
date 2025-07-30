@@ -66,12 +66,12 @@ import kotlinx.coroutines.launch
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun HomeScreen(
-    viewModal: NewViewModel,
+    viewModel: NewViewModel,
     scrollToTopTrigger : MutableState<Boolean>,
     refreshTrigger : MutableState<Boolean>
 ) {
 
-    val articles by viewModal.articles.collectAsState()
+    val articles by viewModel.articles.collectAsState()
     val pagerState = rememberPagerState(pageCount = { articles.size })
 
     val isRefreshing by remember { derivedStateOf { articles.isEmpty() } }
@@ -89,7 +89,7 @@ fun HomeScreen(
                 pagerState.animateScrollToPage(0)
                 swipeRefreshState.isRefreshing = true
                 delay(600)
-                viewModal.refreshNews()
+                viewModel.refreshNews()
                 delay(300)
                 swipeRefreshState.isRefreshing = false
             }
@@ -99,7 +99,7 @@ fun HomeScreen(
 
     var showFullScreen by remember { mutableStateOf(false) }
     var currentImageUrl by remember { mutableStateOf("") }
-    var selectedCategory by remember { mutableStateOf("General") }
+    val selectedCategory by viewModel.selectedCategory.collectAsState()
 
     val context = LocalContext.current
     val isDarkTheme = isSystemInDarkTheme()
@@ -113,18 +113,17 @@ fun HomeScreen(
             .background(if (isDarkTheme) Color.Black else Color.White)
     ) {
         TopBar(
-            viewModal,
+            viewModel,
             selectedCategory,
             onCategorySelected = { category ->
-                selectedCategory = category
-                viewModal.fetchNewsByCategory(category)
+                viewModel.selectedCategory(category)
             }
         )
         SwipeRefresh(
             state = swipeRefreshState,
             onRefresh = {
                 swipeRefreshState.isRefreshing = true
-                viewModal.refreshNews()
+                viewModel.refreshNews()
                 swipeRefreshState.isRefreshing = false
             }
         ) {
@@ -146,7 +145,7 @@ fun HomeScreen(
                         )
                     ) { page ->
                         if (page >= articles.size - 3) {
-                            viewModal.loadMoreNews()
+                            viewModel.loadMoreNews()
                         }
                         val article = articles[page]
                         val scrollState = rememberScrollState()
@@ -233,7 +232,7 @@ fun HomeScreen(
                                     imageVector = if (article.isLiked) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                                     contentDescription = "Like",
                                     modifier = Modifier.clickable {
-                                        viewModal.toggleLike(article)
+                                        viewModel.toggleLike(article)
                                     }
                                 )
 

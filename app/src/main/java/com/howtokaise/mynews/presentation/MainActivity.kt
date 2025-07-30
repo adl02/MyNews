@@ -11,6 +11,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.SideEffect
@@ -88,7 +89,8 @@ class MainActivity : ComponentActivity() {
                 if (onboardingUtils.isOnboardingCompleted()) {
                     Scaffold(
                         modifier = Modifier
-                            .fillMaxSize(),
+                            .fillMaxSize()
+                            .navigationBarsPadding(),
                         bottomBar = {
                             BottomBar(
                                 navController = navController,
@@ -132,6 +134,7 @@ class MainActivity : ComponentActivity() {
                                     Scaffold(
                                         modifier = Modifier
                                             .fillMaxSize()
+                                            .navigationBarsPadding()
                                     ) {
                                         Navigate(newNavController, newViewModel,scrollToTopTrigger,refreshTrigger)
                                     }

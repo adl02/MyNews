@@ -1,6 +1,6 @@
 package com.howtokaise.mynews.data.api
 
 object Constant {
-    val apiKey = "YOUR_API_KEY"
+    val apiKey = "Your_API_Key"
 
 }

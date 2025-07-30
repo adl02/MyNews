@@ -15,7 +15,8 @@ import toEntity
 
 class NewViewModel(private val articleDao: ArticleDao) : ViewModel() {
 
-    private val fetchedCategories = mutableListOf<String>()
+    private val _selectedCategory = MutableStateFlow("General")
+    val selectedCategory : StateFlow<String> = _selectedCategory.asStateFlow()
 
     private val _articles = MutableStateFlow<List<Article>>(emptyList())
     val articles: StateFlow<List<Article>> = _articles.asStateFlow()
@@ -135,5 +136,10 @@ class NewViewModel(private val articleDao: ArticleDao) : ViewModel() {
         allFetchedArticles.clear()
         shownArticles.clear()
         fetchNews(1,category)
+    }
+
+    fun selectedCategory(category: String){
+        _selectedCategory.value = category
+        fetchNewsByCategory(category)
     }
 }
