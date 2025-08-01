@@ -38,6 +38,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -97,8 +98,8 @@ fun HomeScreen(
         }
     }
 
-    var showFullScreen by remember { mutableStateOf(false) }
-    var currentImageUrl by remember { mutableStateOf("") }
+    var showFullScreen by rememberSaveable { mutableStateOf(false) }
+    var currentImageUrl by rememberSaveable { mutableStateOf("") }
     val selectedCategory by viewModel.selectedCategory.collectAsState()
 
     val context = LocalContext.current
