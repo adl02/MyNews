@@ -66,3 +66,9 @@ fun OnboardingGraphUI(onboardingModel: OnboardingModel) {
         )
     }
 }
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun hey(modifier: Modifier = Modifier) {
+    OnboardingGraphUI(OnboardingModel.FirstPages)
+}
